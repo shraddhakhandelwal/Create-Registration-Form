@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Registration Form</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 40px 0;
+        }
+        .registration-container {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            padding: 40px;
+            margin: auto;
+            max-width: 800px;
+        }
+        .form-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .form-header h2 {
+            color: #667eea;
+            font-weight: bold;
+        }
+        .form-label {
+            font-weight: 600;
+            color: #333;
+        }
+        .required::after {
+            content: " *";
+            color: red;
+        }
+        .btn-submit {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border: none;
+            color: white;
+            padding: 12px 40px;
+            border-radius: 50px;
+            font-size: 1.1rem;
+            transition: all 0.3s;
+        }
+        .btn-submit:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+        }
+        .error-message {
+            color: #dc3545;
+            font-size: 0.875rem;
+            margin-top: 0.25rem;
+        }
+        .alert {
+            border-radius: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="registration-container">
+            <div class="form-header">
+                <i class="fas fa-user-plus fa-3x mb-3" style="color: #667eea;"></i>
+                <h2>User Registration Form</h2>
+                <p class="text-muted">Please fill in all required fields</p>
+            </div>
+
+            <!-- Error Message -->
+            <div th:if="${errorMessage}" class="alert alert-danger alert-dismissible fade show" role="alert">
+                <i class="fas fa-exclamation-circle me-2"></i>
+                <span th:text="${errorMessage}"></span>
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            </div>
+
+            <!-- Registration Form -->
+            <form th:action="@{/register}" th:object="${userRegistrationDTO}" method="post">
+                
+                <!-- Personal Information Section -->
+                <h5 class="mb-3"><i class="fas fa-user me-2"></i>Personal Information</h5>
+                <div class="row mb-3">
+                    <div class="col-md-6">
+                        <label for="firstName" class="form-label required">First Name</label>
+                        <input type="text" class="form-control" id="firstName" 
+                               th:field="*{firstName}" placeholder="Enter first name">
+                        <div class="error-message" th:if="${#fields.hasErrors('firstName')}" 
+                             th:errors="*{firstName}"></div>
+                    </div>
+                    <div class="col-md-6">
+                        <label for="lastName" class="form-label required">Last Name</label>
+                        <input type="text" class="form-control" id="lastName" 
+                               th:field="*{lastName}" placeholder="Enter last name">
+                        <div class="error-message" th:if="${#fields.hasErrors('lastName')}" 
+                             th:errors="*{lastName}"></div>
+                    </div>
+                </div>
+
+                <div class="row mb-3">
+                    <div class="col-md-6">
+                        <label for="dateOfBirth" class="form-label required">Date of Birth</label>
+                        <input type="date" class="form-control" id="dateOfBirth" 
+                               th:field="*{dateOfBirth}">
+                        <div class="error-message" th:if="${#fields.hasErrors('dateOfBirth')}" 
+                             th:errors="*{dateOfBirth}"></div>
+                    </div>
+                    <div class="col-md-6">
+                        <label for="gender" class="form-label required">Gender</label>
+                        <select class="form-select" id="gender" th:field="*{gender}">
+                            <option value="">Select Gender</option>
+                            <option value="Male">Male</option>
+                            <option value="Female">Female</option>
+                            <option value="Other">Other</option>
+                        </select>
+                        <div class="error-message" th:if="${#fields.hasErrors('gender')}" 
+                             th:errors="*{gender}"></div>
+                    </div>
+                </div>
+
+                <!-- Account Information Section -->
+                <h5 class="mb-3 mt-4"><i class="fas fa-lock me-2"></i>Account Information</h5>
+                <div class="row mb-3">
+                    <div class="col-md-6">
+                        <label for="username" class="form-label required">Username</label>
+                        <input type="text" class="form-control" id="username" 
+                               th:field="*{username}" placeholder="Choose a username">
+                        <div class="error-message" th:if="${#fields.hasErrors('username')}" 
+                             th:errors="*{username}"></div>
+                    </div>
+                    <div class="col-md-6">
+                        <label for="email" class="form-label required">Email</label>
+                        <input type="email" class="form-control" id="email" 
+                               th:field="*{email}" placeholder="your.email@example.com">
+                        <div class="error-message" th:if="${#fields.hasErrors('email')}" 
+                             th:errors="*{email}"></div>
+                    </div>
+                </div>
+
+                <div class="row mb-3">
+                    <div class="col-md-6">
+                        <label for="password" class="form-label required">Password</label>
+                        <input type="password" class="form-control" id="password" 
+                               th:field="*{password}" placeholder="Minimum 8 characters">
+                        <div class="error-message" th:if="${#fields.hasErrors('password')}" 
+                             th:errors="*{password}"></div>
+                    </div>
+                    <div class="col-md-6">
+                        <label for="confirmPassword" class="form-label required">Confirm Password</label>
+                        <input type="password" class="form-control" id="confirmPassword" 
+                               th:field="*{confirmPassword}" placeholder="Re-enter password">
+                        <div class="error-message" th:if="${#fields.hasErrors('confirmPassword')}" 
+                             th:errors="*{confirmPassword}"></div>
+                    </div>
+                </div>
+
+                <!-- Contact Information Section -->
+                <h5 class="mb-3 mt-4"><i class="fas fa-phone me-2"></i>Contact Information</h5>
+                <div class="mb-3">
+                    <label for="phoneNumber" class="form-label required">Phone Number</label>
+                    <input type="tel" class="form-control" id="phoneNumber" 
+                           th:field="*{phoneNumber}" placeholder="10-digit phone number">
+                    <div class="error-message" th:if="${#fields.hasErrors('phoneNumber')}" 
+                         th:errors="*{phoneNumber}"></div>
+                </div>
+
+                <div class="mb-3">
+                    <label for="address" class="form-label">Address</label>
+                    <textarea class="form-control" id="address" th:field="*{address}" 
+                              rows="2" placeholder="Street address"></textarea>
+                    <div class="error-message" th:if="${#fields.hasErrors('address')}" 
+                         th:errors="*{address}"></div>
+                </div>
+
+                <div class="row mb-3">
+                    <div class="col-md-6">
+                        <label for="city" class="form-label">City</label>
+                        <input type="text" class="form-control" id="city" 
+                               th:field="*{city}" placeholder="Enter city">
+                        <div class="error-message" th:if="${#fields.hasErrors('city')}" 
+                             th:errors="*{city}"></div>
+                    </div>
+                    <div class="col-md-6">
+                        <label for="state" class="form-label">State</label>
+                        <input type="text" class="form-control" id="state" 
+                               th:field="*{state}" placeholder="Enter state">
+                        <div class="error-message" th:if="${#fields.hasErrors('state')}" 
+                             th:errors="*{state}"></div>
+                    </div>
+                </div>
+
+                <div class="row mb-3">
+                    <div class="col-md-6">
+                        <label for="postalCode" class="form-label">Postal Code</label>
+                        <input type="text" class="form-control" id="postalCode" 
+                               th:field="*{postalCode}" placeholder="6-digit postal code">
+                        <div class="error-message" th:if="${#fields.hasErrors('postalCode')}" 
+                             th:errors="*{postalCode}"></div>
+                    </div>
+                    <div class="col-md-6">
+                        <label for="country" class="form-label">Country</label>
+                        <input type="text" class="form-control" id="country" 
+                               th:field="*{country}" placeholder="Enter country">
+                        <div class="error-message" th:if="${#fields.hasErrors('country')}" 
+                             th:errors="*{country}"></div>
+                    </div>
+                </div>
+
+                <!-- Submit Buttons -->
+                <div class="d-grid gap-2 d-md-flex justify-content-md-center mt-4">
+                    <button type="submit" class="btn btn-submit">
+                        <i class="fas fa-check-circle me-2"></i>Register
+                    </button>
+                    <a href="/" class="btn btn-outline-secondary" style="border-radius: 50px; padding: 12px 40px;">
+                        <i class="fas fa-times me-2"></i>Cancel
+                    </a>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
